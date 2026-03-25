@@ -1,15 +1,6 @@
-const btn = document.getElementById("btn");
-const btnToXML = document.getElementById("btnToXML");
-const btnToJSON = document.getElementById("btnToJSON");
-const btnToXML2 = document.getElementById("btnToXML2");
-const btnToJSON2 = document.getElementById("btnToJSON2");
-const btnPokeXML = document.getElementById("btnPokeXML");
-const btnPokeHabilitats = document.getElementById("btnPokeHabilitats");
-const btnPokeFoto = document.getElementById("btnPokeFoto");
-
-
-
 //EX 
+const btn = document.getElementById("btn");
+
 btn.addEventListener("click", async () => {
 
   const text = document.getElementById("input").value;
@@ -40,32 +31,31 @@ btn.addEventListener("click", async () => {
 });
 
 
+// ACT 1.2
+const btnXML = document.getElementById("btnXML");
+const btnJSON = document.getElementById("btnJSON");
 
-// ACT 1
-btnToXML.addEventListener("click", async () => {
-  const text = document.getElementById("input").value;
-  const res = await fetch("/toXML", {
+
+btnXML.addEventListener("click", async () => {
+  const text = document.getElementById("input1").value;
+  const res = await fetch("/convertXML", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: { "Content-Type": "application/json"},
     body: JSON.stringify({ data: text })
   });
   const json = await res.json();
-  document.getElementById("output").value = json.result;
+  document.getElementById("output1").value = json.result;
 });
 
-btnToJSON.addEventListener("click", async () => {
-  const text = document.getElementById("input").value;
-  const res = await fetch("/ToJSON", {
+btnJSON.addEventListener("click", async () => {
+  const text = document.getElementById("input1").value;
+  const res = await fetch("/convertJSON", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: { "Content-Type": "application/json"},
     body: JSON.stringify({ data: text })
   });
   const json = await res.json();
-  document.getElementById("output").value = json.result;
+  document.getElementById("output1").value = json.result;
 });
 
 
@@ -73,26 +63,30 @@ btnToJSON.addEventListener("click", async () => {
 
 
 // ACT 2
-btnToXML2.addEventListener("click", async () => {
-  const text = document.getElementById("input").value;
-  const res = await fetch("/ToXML2", {
+const btnXML2 = document.getElementById("btnXML2");
+const btnJSON2 = document.getElementById("btnJSON2");
+
+
+btnXML2.addEventListener("click", async () => {
+  const text = document.getElementById("input2").value;
+  const res = await fetch("/convertXML2", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ data: text })
   });
   const json = await res.json();
-  document.getElementById("output").value = json.result;
+  document.getElementById("output2").value = json.result;
 });
 
-btnToJSON2.addEventListener("click", async () => {
-  const text = document.getElementById("input").value;
-  const res = await fetch("/ToJSON2", {
+btnJSON2.addEventListener("click", async () => {
+  const text = document.getElementById("input2").value;
+  const res = await fetch("/convertJSON2", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ data: text })
   });
   const json = await res.json();
-  document.getElementById("output").value = json.result;
+  document.getElementById("output2").value = json.result;
 });
 
 
@@ -100,44 +94,48 @@ btnToJSON2.addEventListener("click", async () => {
 
 
 // ACT 3
-btnPokeXML.addEventListener("click", async () => {
-  const name = document.getElementById("input").value.toLowerCase();
+const btn_pokemon = document.getElementById("btn_pokemon");
+const btn_habilitats = document.getElementById("btn_habilitats");
+const btn_foto = document.getElementById("btn_foto");
+
+
+btn_pokemon.addEventListener("click", async () => {
+  const name = document.getElementById("input_pokemon").value.toLowerCase();
   const res = await fetch("/PokemonXML", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ data: name })
   });
   const json = await res.json();
-  document.getElementById("output").value = json.result;
+  document.getElementById("output_pokemon").value = json.result;
 });
 
-btnPokeHabilitats.addEventListener("click", async () => {
-  const name = document.getElementById("input").value.toLowerCase();
-  const res = await fetch("/getPokeJson", {
+
+btn_habilitats.addEventListener("click", async () => {
+  const name = document.getElementById("input_pokemon").value.toLowerCase();
+  const res = await fetch("/PokemonJSON", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ data: name })
   });
   const json = await res.json();
   const pokemon = json.result;
-  const habs = pokemon.abilities.map(a => a.ability.name).join(", ");
-  document.getElementById("output").value = "Habilitats de " + name + ": " + habs;
+  const habilitat = pokemon.habilities.map(a => a.hability.name).join(", ");
+  document.getElementById("output_pokemon").value = "Habilitats de " + name + ": " + habilitat;
 });
 
-btnPokeFoto.addEventListener("click", async () => {
-  const name = document.getElementById("input").value.toLowerCase();
-  const res = await fetch("/getPokeJson", {
+
+btn_foto.addEventListener("click", async () => {
+  const name = document.getElementById("input_pokemon").value.toLowerCase();
+  const res = await fetch("/PokemonJSON", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ data: name })
   });
   const json = await res.json();
-  const pokemon = json.result;
-  let img = document.getElementById("pokeImg");
-  if (!img) {
-    img = document.createElement("img");
-    img.id = "pokeImg";
-    document.body.appendChild(img);
-  }
-  img.src = pokemon.sprites.front_default;
+  document.getElementById("output_pokemon").value = JSON.stringify(json.result);
+   
+  let image = document.createElement("img");
+  image.src = json.result.sprites.front_shiny;
+  document.body.appendChild(image);
 });
